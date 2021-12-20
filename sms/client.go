@@ -214,7 +214,7 @@ func getIntValueFromListResponseBody(responseBody string, keyProperty string, em
 	}
 
 	if strings.Compare(processedSplit[0], keyProperty) != 0 {
-		return -1, fmt.Errorf("unknown key '%s' in the response", processedSplit[0])
+		return -1, fmt.Errorf("invalid response: unknown key '%s'", processedSplit[0])
 	}
 
 	if processedSplit[1] == "" && emptyValueFunc != nil {
