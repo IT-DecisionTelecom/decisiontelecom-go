@@ -3,7 +3,7 @@ package viber
 const baseUrl = "https://web.it-decision.com/v1/api"
 const messageIdPropertyName = "message_id"
 
-// MessageType represents a Viber message type
+// MessageType represents a Viber message type.
 type MessageType uint16
 
 const (
@@ -23,26 +23,16 @@ const (
 
 // Message represents a Viber message.
 type Message struct {
-	// Sender is a message sender (from whom message is sent).
-	Sender string
-	// Receiver is a message receiver (to whom message is sent).
-	Receiver string
-	// Message type is a message type.
-	MessageType MessageType
-	// Text is a message in the UTF8 format.
-	Text string
-	// ImageUrl is URL of an image for promotional message with button caption and button action.
-	ImageUrl string
-	// ButtonCaption is a button caption in the UTF8 format.
-	ButtonCaption string
-	// ButtonAction is an URL for transition when the button is pressed.
-	ButtonAction string
-	// SourceType is a message sending procedure.
-	SourceType MessageSourceType
-	// CallbackUrl is an URL for message status callback.
-	CallbackUrl string
-	// ValidityPeriod is a life time of a message (in seconds).
-	ValidityPeriod int
+	Sender         string            // Sender is a message sender (from whom message is sent).
+	Receiver       string            // Receiver is a message receiver (to whom message is sent).
+	MessageType    MessageType       // Message type is a message type.
+	Text           string            // Text is a message in the UTF8 format.
+	ImageUrl       string            // ImageUrl is URL of an image for promotional message with button caption and button action.
+	ButtonCaption  string            // ButtonCaption is a button caption in the UTF8 format.
+	ButtonAction   string            // ButtonAction is an URL for transition when the button is pressed.
+	SourceType     MessageSourceType // SourceType is a message sending procedure.
+	CallbackUrl    string            // CallbackUrl is an URL for message status callback.
+	ValidityPeriod int               // ValidityPeriod is a life time of a message (in seconds).
 }
 
 // MessageId specifies an Id of the Viber message.
@@ -92,12 +82,12 @@ func NewClient(apiKey string) *Client {
 	}
 }
 
-// SendMessage sends Viber message
+// SendMessage sends Viber message.
 func (client *Client) SendMessage(message Message) (MessageId, error) {
 	return client.base.SendMessage(message)
 }
 
-// GetMessageStatus returns Viber message status
+// GetMessageStatus returns Viber message status.
 func (client *Client) GetMessageStatus(messageId MessageId) (*MessageReceipt, error) {
 	messageReceipt := &MessageReceipt{}
 	if err := client.base.GetMessageStatusResponse(messageId, messageReceipt); err != nil {
