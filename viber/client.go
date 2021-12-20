@@ -1,10 +1,5 @@
 package viber
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 const baseUrl = "https://web.it-decision.com/v1/api"
 const messageIdPropertyName = "message_id"
 
@@ -87,44 +82,27 @@ type MessageReceipt struct {
 
 // Client is used to work with Viber messages.
 type Client struct {
-	ApiKey string
+	base *BaseClient
 }
 
 // NewClient creates new Viber client instance.
 func NewClient(apiKey string) *Client {
-	return &Client{ApiKey: apiKey}
+	return &Client{
+		base: &BaseClient{ApiKey: apiKey},
+	}
 }
 
 // SendMessage sends Viber message
 func (client *Client) SendMessage(message Message) (MessageId, error) {
-	url := fmt.Sprintf("%s/send-viber", baseUrl)
-	responseBody, err := MakeHttpRequest(client.ApiKey, url, message)
-	if err != nil {
-		return -1, err
-	}
-
-	var responseMap map[string]int64
-	if err := json.Unmarshal([]byte(responseBody), &responseMap); err != nil {
-		return -1, err
-	}
-
-	return MessageId(responseMap[messageIdPropertyName]), nil
+	return client.base.SendMessage(message)
 }
 
 // GetMessageStatus returns Viber message status
 func (client *Client) GetMessageStatus(messageId MessageId) (*MessageReceipt, error) {
-	url := fmt.Sprintf("%s/receive-viber", baseUrl)
-	request := map[string]MessageId{messageIdPropertyName: messageId}
-
-	responseBody, err := MakeHttpRequest(client.ApiKey, url, request)
-	if err != nil {
+	messageReceipt := &MessageReceipt{}
+	if err := client.base.GetMessageStatusResponse(messageId, messageReceipt); err != nil {
 		return nil, err
 	}
 
-	var messageReceipt MessageReceipt
-	if err := json.Unmarshal([]byte(responseBody), &messageReceipt); err != nil {
-		return nil, err
-	}
-
-	return &messageReceipt, nil
+	return messageReceipt, nil
 }
