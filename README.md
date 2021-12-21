@@ -3,6 +3,7 @@ IT-Decision Telecom Go SDK
 
 Convenient Go client for IT-Decision Telecom messaging API.
 
+[![build](https://github.com/IT-DecisionTelecom/decisiontelecom-go/actions/workflows/test.yml/badge.svg)](https://github.com/IT-DecisionTelecom/decisiontelecom-go/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Requirements
