@@ -64,6 +64,28 @@ const (
 	Unknown = iota + 20
 )
 
+// String returns the message status description.
+func (s MessageStatus) String() string {
+	switch s {
+	case Sent:
+		return "Sent"
+	case Delivered:
+		return "Delivered"
+	case ErrorStatus:
+		return "Error"
+	case Rejected:
+		return "Rejected"
+	case Undelivered:
+		return "Undelivered"
+	case Pending:
+		return "Pending"
+	case Unknown:
+		return "Unknown"
+	default:
+		return "Invalid status"
+	}
+}
+
 // MessageReceipt represents Id and status of the particular Viber message.
 type MessageReceipt struct {
 	MessageId MessageId     `json:"message_id"`

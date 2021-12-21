@@ -16,14 +16,10 @@ const baseUrl = "https://web.it-decision.com/ru/js"
 
 // Message represents an SMS message.
 type Message struct {
-	// ReceiverPhone is a message receiver phone number (MSISDN Destination)
-	ReceiverPhone string
-	// Sender is a message sender. Could be a mobile phone number (including a country code) or an alphanumeric string.
-	Sender string
-	// Text is a message body.
-	Text string
-	// Delivery should be true if a caller needs to obtain the delivery receipt in the future (by message id).
-	Delivery bool
+	ReceiverPhone string // ReceiverPhone is a message receiver phone number (MSISDN Destination)
+	Sender        string // Sender is a message sender. Could be a mobile phone number (including a country code) or an alphanumeric string.
+	Text          string // Text is a message body.
+	Delivery      bool   // Delivery should be true if a caller needs to obtain the delivery receipt in the future (by message id).
 }
 
 // Balance represents user money balance.
@@ -66,7 +62,8 @@ func (code ErrorCode) String() string {
 		"EmptyLogin",
 		"EmptyPassword",
 		"NotEnoughMoney",
-		"AuthorizationError"}
+		"AuthorizationError",
+	}
 	if int(code-40) < len(errors) {
 		return errors[code-40]
 	}
@@ -86,6 +83,22 @@ const (
 	Undeliverable
 	Accepted
 )
+
+// String returns the message status description.
+func (s MessageStatus) String() string {
+	switch s {
+	case Unknown:
+		return "Unknown"
+	case Delivered:
+		return "Delivered"
+	case Undeliverable:
+		return "Undeliverable"
+	case Accepted:
+		return "Accepted"
+	default:
+		return "Invalid status"
+	}
+}
 
 // Error represents error which may occur while working with SMS messages.
 // It holds SMS error code.

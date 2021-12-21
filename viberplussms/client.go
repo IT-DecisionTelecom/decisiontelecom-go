@@ -7,7 +7,7 @@ import (
 // Message represents a Viber plus SMS message.
 type Message struct {
 	viber.Message
-	SmsText string //Alternative SMS message text for cases when Viber message is not sent.
+	SmsText string // SmsText is an alternative SMS message text for cases when Viber message is not sent.
 }
 
 // SmsMessageStatus represents SMS message status
@@ -19,6 +19,20 @@ const (
 	_
 	Undeliverable
 )
+
+// String returns the SMS message status description.
+func (s SmsMessageStatus) String() string {
+	switch s {
+	case Delivered:
+		return "Delivered"
+	case Expired:
+		return "Expired"
+	case Undeliverable:
+		return "Undeliverable"
+	default:
+		return "Invalid status"
+	}
+}
 
 // MessageReceipt represents Id and status of the particular Viber plus SMS message.
 type MessageReceipt struct {
