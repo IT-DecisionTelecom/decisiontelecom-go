@@ -7,7 +7,7 @@ import (
 // Message represents a Viber plus SMS message.
 type Message struct {
 	viber.Message
-	SmsText string // SmsText is an alternative SMS message text for cases when Viber message is not sent.
+	SmsText string `json:"text_sms"` // SmsText is an alternative SMS message text for cases when Viber message is not sent.
 }
 
 // SmsMessageStatus represents SMS message status
