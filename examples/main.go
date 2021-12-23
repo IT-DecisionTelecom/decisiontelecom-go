@@ -104,16 +104,16 @@ func viberClientSendMessage() {
 
 	// Create viber message object
 	message := viber.Message{
-		Sender:         "380504444444",
+		Sender:         "Custom company",
 		Receiver:       "380504444444",
-		MessageType:    viber.TextOnly,
-		Text:           "Test Viber Message",
+		MessageType:    viber.TextImageButton,
+		Text:           "Message content",
 		ImageUrl:       "https://yourdomain.com/images/image.jpg",
 		ButtonCaption:  "Join Us",
 		ButtonAction:   "https://yourdomain.com/join-us",
-		SourceType:     viber.Transactional,
+		SourceType:     viber.Promotional,
 		CallbackUrl:    "https://yourdomain.com/viber-callback",
-		ValidityPeriod: 50,
+		ValidityPeriod: 3600,
 	}
 
 	// Call client SendMessage method to send viber message.
@@ -156,7 +156,7 @@ func viberClientGetMessageStatus() {
 		}
 	} else {
 		// If no errors occurred, GetMessageStatus method should return status of the sent Viber message.
-		fmt.Printf("viber message status code: %d, message status name: %s\n", receipt.Status, receipt.Status.String())
+		fmt.Printf("viber message status code: %d (%s)\n", receipt.Status, receipt.Status.String())
 	}
 }
 
@@ -169,12 +169,12 @@ func viberPlusSmsClientSendMessage() {
 		Message: viber.Message{
 			Sender:         "380504444444",
 			Receiver:       "380504444444",
-			MessageType:    viber.TextOnly,
-			Text:           "Test Viber Message",
+			MessageType:    viber.TextImageButton,
+			Text:           "Viber Message",
 			ImageUrl:       "https://yourdomain.com/images/image.jpg",
 			ButtonCaption:  "Join Us",
 			ButtonAction:   "https://yourdomain.com/join-us",
-			SourceType:     viber.Transactional,
+			SourceType:     viber.Promotional,
 			CallbackUrl:    "https://yourdomain.com/viber-callback",
 			ValidityPeriod: 50,
 		},
@@ -213,10 +213,10 @@ func viberPlusSmsClientGetMessageStatus() {
 		viberError, ok := err.(viber.Error)
 		if !ok {
 			// A non-DecisionTelecom error occurred (like connection error).
-			fmt.Printf("error while sending Viber plus SMS message: %+v\n", err)
+			fmt.Printf("error while getting Viber plus SMS message status: %+v\n", err)
 		} else {
 			// DecisionTelecom error occurred.
-			fmt.Printf("error while sending Viber plus SMS message.\nerror name: %s\nerror message: %s\nerror code: %d\nerror status: %d\n",
+			fmt.Printf("error while getting Viber plus SMS message status.\nerror name: %s\nerror message: %s\nerror code: %d\nerror status: %d\n",
 				viberError.Name, viberError.Message, viberError.Code, viberError.Status)
 		}
 	} else {
