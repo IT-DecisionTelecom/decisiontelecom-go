@@ -47,6 +47,7 @@ const (
 	EmptyPassword
 	NotEnoughMoney
 	AuthorizationError
+	InvalidPhoneNumber
 )
 
 // String returns the error code description.
@@ -63,6 +64,7 @@ func (code ErrorCode) String() string {
 		"EmptyPassword",
 		"NotEnoughMoney",
 		"AuthorizationError",
+		"InvalidPhoneNumber",
 	}
 	if int(code-40) < len(errors) {
 		return errors[code-40]
@@ -138,11 +140,7 @@ func (client *Client) SendMessage(message Message) (MessageId, error) {
 		return -1, err
 	}
 
-	emptyValueFunc := func() (int64, error) {
-		return -1, Error{Code: IncorrectJson}
-	}
-
-	msgId, err := getIntValueFromListResponseBody(responseBody, "msgid", emptyValueFunc)
+	msgId, err := getIntValueFromListResponseBody(responseBody, "msgid", nil)
 	if err != nil {
 		return -1, err
 	}

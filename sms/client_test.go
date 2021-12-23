@@ -14,7 +14,6 @@ func TestSendMessage(t *testing.T) {
 		expectedError     error
 	}{
 		{`["msgid","31885463"]`, sms.MessageId(31885463), nil},
-		{`["msgid",""]`, -1, sms.Error{sms.IncorrectJson}},
 		{`["error","44"]`, -1, sms.Error{sms.InvalidLoginOrPassword}},
 	}
 
