@@ -13,7 +13,8 @@ func main() {
 	smsClientGetMessageStatus()
 	smsClientGetBalance()
 
-	viberClientSendMessage()
+	viberClientSendPromotionalMessage()
+	viberClientSendTransactionalMessage()
 	viberClientGetMessageStatus()
 
 	viberPlusSmsClientSendMessage()
@@ -98,11 +99,11 @@ func smsClientGetBalance() {
 	}
 }
 
-func viberClientSendMessage() {
+func viberClientSendPromotionalMessage() {
 	// Create new instance of the viber client.
 	viberClient := viber.NewClient("<YOUR_ACCESS_KEY>")
 
-	// Create viber message object
+	// Create viber message object. This one will be promotional message with message text, image and button.
 	message := viber.Message{
 		Sender:         "Custom company",
 		Receiver:       "380504444444",
@@ -112,6 +113,41 @@ func viberClientSendMessage() {
 		ButtonCaption:  "Join Us",
 		ButtonAction:   "https://yourdomain.com/join-us",
 		SourceType:     viber.Promotional,
+		CallbackUrl:    "https://yourdomain.com/viber-callback",
+		ValidityPeriod: 3600,
+	}
+
+	// Call client SendMessage method to send viber message.
+	msgId, err := viberClient.SendMessage(message)
+
+	// Handle error if it has occurred while sending viber message.
+	if err != nil {
+		viberError, ok := err.(viber.Error)
+		if !ok {
+			// A non-DecisionTelecom error occurred (like connection error).
+			fmt.Printf("error while sending Viber message: %+v\n", err)
+		} else {
+			// DecisionTelecom error occurred.
+			fmt.Printf("error while sending Viber message.\nerror name: %s\nerror message: %s\nerror code: %d\nerror status: %d\n",
+				viberError.Name, viberError.Message, viberError.Code, viberError.Status)
+		}
+	} else {
+		// If no errors occurred, SendMessage method should return Id of the sent Viber message.
+		fmt.Printf("message Id: %d\n", msgId)
+	}
+}
+
+func viberClientSendTransactionalMessage() {
+	// Create new instance of the viber client.
+	viberClient := viber.NewClient("<YOUR_ACCESS_KEY>")
+
+	// Create viber message object. This one will be transactional message with message text only.
+	message := viber.Message{
+		Sender:         "Custom company",
+		Receiver:       "380504444444",
+		MessageType:    viber.TextOnly,
+		Text:           "Message content",
+		SourceType:     viber.Transactional,
 		CallbackUrl:    "https://yourdomain.com/viber-callback",
 		ValidityPeriod: 3600,
 	}
