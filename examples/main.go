@@ -17,7 +17,8 @@ func main() {
 	viberClientSendTransactionalMessage()
 	viberClientGetMessageStatus()
 
-	viberPlusSmsClientSendMessage()
+	viberPlusSmsClientSendTransactionalMessage()
+	viberPlusSmsClientSendPromotionalMessage()
 	viberPlusSmsClientGetMessageStatus()
 }
 
@@ -93,7 +94,7 @@ func smsClientGetBalance() {
 			fmt.Printf("error while getting SMS balance, error code: %d, error name: %s\n", smsError.Code, smsError.Code.String())
 		}
 	} else {
-		// If no errors occurred, GetBalance method should return status of the sent SMS message.
+		// If no errors occurred, GetBalance method should return SMS balance information.
 		fmt.Printf("balance information: Balance: %f, Credit: %f, Currency: %s\n",
 			balance.BalanceAmount, balance.CreditAmount, balance.Currency)
 	}
@@ -196,23 +197,61 @@ func viberClientGetMessageStatus() {
 	}
 }
 
-func viberPlusSmsClientSendMessage() {
+func viberPlusSmsClientSendTransactionalMessage() {
 	// Create new instance of the viber plus SMS client.
 	viberSmsClient := viberplussms.NewClient("<YOUR_ACCESS_KEY>")
 
-	// Create viber plus SMS message object
+	// Create viber plus SMS message object. This one will be transactional message with message text only.
 	message := viberplussms.Message{
 		Message: viber.Message{
-			Sender:         "380504444444",
+			Sender:         "Custom company",
+			Receiver:       "380504444444",
+			MessageType:    viber.TextOnly,
+			Text:           "Message content",
+			SourceType:     viber.Transactional,
+			CallbackUrl:    "https://yourdomain.com/viber-callback",
+			ValidityPeriod: 3600,
+		},
+		SmsText: "Text SMS Message",
+	}
+
+	// Call client SendMessage method to send viber plus SMS message.
+	msgId, err := viberSmsClient.SendMessage(message)
+
+	// Handle error if it has occurred while sending viber plus SMS message.
+	if err != nil {
+		viberError, ok := err.(viber.Error)
+		if !ok {
+			// A non-DecisionTelecom error occurred (like connection error).
+			fmt.Printf("error while sending Viber plus SMS message: %+v\n", err)
+		} else {
+			// DecisionTelecom error occurred.
+			fmt.Printf("error while sending Viber plus SMS message.\nerror name: %s\nerror message: %s\nerror code: %d\nerror status: %d\n",
+				viberError.Name, viberError.Message, viberError.Code, viberError.Status)
+		}
+	} else {
+		// If no errors occurred, SendMessage method should return Id of the sent Viber plus SMS message.
+		fmt.Printf("message Id: %d\n", msgId)
+	}
+}
+
+func viberPlusSmsClientSendPromotionalMessage() {
+	// Create new instance of the viber plus SMS client.
+	viberSmsClient := viberplussms.NewClient("<YOUR_ACCESS_KEY>")
+
+	// Create viber plus SMS message object. This one will be promotional message with message text, image and button.
+	message := viberplussms.Message{
+		Message: viber.Message{
+			Sender:         "Custom company",
 			Receiver:       "380504444444",
 			MessageType:    viber.TextImageButton,
-			Text:           "Viber Message",
+			Text:           "Message content",
 			ImageUrl:       "https://yourdomain.com/images/image.jpg",
 			ButtonCaption:  "Join Us",
 			ButtonAction:   "https://yourdomain.com/join-us",
 			SourceType:     viber.Promotional,
 			CallbackUrl:    "https://yourdomain.com/viber-callback",
-			ValidityPeriod: 50,
+			ValidityPeriod: 3600,
 		},
 		SmsText: "Text SMS Message",
 	}
