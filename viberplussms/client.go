@@ -36,10 +36,10 @@ func (s SmsMessageStatus) String() string {
 
 // MessageReceipt represents Id and status of the particular Viber plus SMS message.
 type MessageReceipt struct {
-	MessageId        viber.MessageId     `json:"message_id"`
-	Status           viber.MessageStatus `json:"status"`
-	SmsMessageId     int64               `json:"sms_message_id"`
-	SmsMessageStatus SmsMessageStatus    `json:"sms_message_status"`
+	MessageId        viber.MessageId     `json:"message_id"`         // Id of the Viber message which status should be got (sent in the last 5 days).
+	Status           viber.MessageStatus `json:"status"`             // Viber message status
+	SmsMessageId     int64               `json:"sms_message_id"`     // SMS message Id (if available, only for transactional messages)
+	SmsMessageStatus SmsMessageStatus    `json:"sms_message_status"` // SMS message status (if available, only for transactional messages)
 }
 
 // Client is used to work with Viber plus SMS messages.

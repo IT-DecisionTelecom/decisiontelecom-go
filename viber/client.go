@@ -40,10 +40,10 @@ type MessageId int64
 
 // Error represents error which may occur while working with Viber messages.
 type Error struct {
-	Name    string `json:"name"`
-	Message string `json:"message"`
-	Code    int    `json:"code"`
-	Status  int    `json:"status"`
+	Name    string `json:"name"`    // Error name
+	Message string `json:"message"` // Error message
+	Code    int    `json:"code"`    // Error code
+	Status  int    `json:"status"`  // Error status
 }
 
 // Error implements error interface.
@@ -88,8 +88,8 @@ func (s MessageStatus) String() string {
 
 // MessageReceipt represents Id and status of the particular Viber message.
 type MessageReceipt struct {
-	MessageId MessageId     `json:"message_id"`
-	Status    MessageStatus `json:"status"`
+	MessageId MessageId     `json:"message_id"` // Id of the Viber message which status should be got (sent in the last 5 days).
+	Status    MessageStatus `json:"status"`     // Viber message status
 }
 
 // Client is used to work with Viber messages.
