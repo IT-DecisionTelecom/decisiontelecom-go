@@ -95,6 +95,7 @@ SMS client methods return errors in form of the error code. Here are all possibl
 - 48 - Empty password
 - 49 - Not enough money to send a message
 - 50 - Authentication error
+- 51 - Invalid phone number
 
 #### Viber errors
 Viber and Viber plus SMS client methods return errors in form of a struct with the `Name`, `Message`, `Code` and `Status` properties.
