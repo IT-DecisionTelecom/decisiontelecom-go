@@ -7,7 +7,7 @@ import (
 	"github.com/jarcoal/httpmock"
 )
 
-func TestSendMessage(t *testing.T) {
+func TestSendViberPlusSmsMessage(t *testing.T) {
 	var inputData = []struct {
 		responseStatus    int
 		response          string
@@ -29,7 +29,7 @@ func TestSendMessage(t *testing.T) {
 		{401, `Some response content`, -1, viber.Error{Name: "Unauthorized", Status: 401}},
 	}
 
-	client := viber.NewClient("")
+	client := viber.NewViberPlusSmsClient("")
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -39,7 +39,7 @@ func TestSendMessage(t *testing.T) {
 			httpmock.RegisterResponder("POST", "https://web.it-decision.com/v1/api/send-viber",
 				httpmock.NewStringResponder(input.responseStatus, input.response))
 
-			msgId, err := client.SendMessage(viber.Message{})
+			msgId, err := client.SendMessage(viber.MessageWithSms{})
 			if err != input.expectedError {
 				t.Errorf("FAIL. Expected error '%+v', but got '%+v'", input.expectedError, err)
 			}
@@ -51,14 +51,24 @@ func TestSendMessage(t *testing.T) {
 	}
 }
 
-func TestGetMessageStatus(t *testing.T) {
+func TestGetViberPlusSmsMessageStatus(t *testing.T) {
 	var inputData = []struct {
 		responseStatus     int
 		response           string
-		expectedMsgReceipt *viber.MessageReceipt
+		expectedMsgReceipt *viber.MessageReceiptWithSms
 		expectedError      error
 	}{
-		{200, `{"message_id":429,"status":1}`, &viber.MessageReceipt{MessageId: 429, Status: viber.Delivered}, nil},
+		{
+			200,
+			`{"message_id":429,"status":1,"sms_message_id":36478,"sms_message_status":2}`,
+			&viber.MessageReceiptWithSms{
+				MessageId:        429,
+				Status:           viber.Delivered,
+				SmsMessageId:     36478,
+				SmsMessageStatus: viber.SmsDelivered,
+			},
+			nil,
+		},
 		{
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
@@ -73,7 +83,7 @@ func TestGetMessageStatus(t *testing.T) {
 		{401, `Some response content`, nil, viber.Error{Name: "Unauthorized", Status: 401}},
 	}
 
-	client := viber.NewClient("")
+	client := viber.NewViberPlusSmsClient("")
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -88,7 +98,11 @@ func TestGetMessageStatus(t *testing.T) {
 				t.Errorf("FAIL. Expected error '%+v', but got '%+v'", input.expectedError, err)
 			}
 
-			if input.expectedMsgReceipt != nil && (msgReceipt.MessageId != input.expectedMsgReceipt.MessageId || msgReceipt.Status != input.expectedMsgReceipt.Status) {
+			if input.expectedMsgReceipt != nil &&
+				(msgReceipt.MessageId != input.expectedMsgReceipt.MessageId ||
+					msgReceipt.Status != input.expectedMsgReceipt.Status ||
+					msgReceipt.SmsMessageId != input.expectedMsgReceipt.SmsMessageId ||
+					msgReceipt.SmsMessageStatus != input.expectedMsgReceipt.SmsMessageStatus) {
 				t.Errorf("FAIL. Expected message receipt '%+v', but got '%+v'", input.expectedMsgReceipt, msgReceipt)
 			}
 		})

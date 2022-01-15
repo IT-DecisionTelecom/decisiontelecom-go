@@ -5,7 +5,6 @@ import (
 
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/sms"
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
-	"github.com/IT-DecisionTelecom/decisiontelecom-go/viberplussms"
 )
 
 func main() {
@@ -102,7 +101,7 @@ func smsClientGetBalance() {
 
 func viberClientSendPromotionalMessage() {
 	// Create new instance of the viber client.
-	viberClient := viber.NewClient("<YOUR_ACCESS_KEY>")
+	viberClient := viber.NewViberClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber message object. This one will be promotional message with message text, image and button.
 	message := viber.Message{
@@ -140,7 +139,7 @@ func viberClientSendPromotionalMessage() {
 
 func viberClientSendTransactionalMessage() {
 	// Create new instance of the viber client.
-	viberClient := viber.NewClient("<YOUR_ACCESS_KEY>")
+	viberClient := viber.NewViberClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber message object. This one will be transactional message with message text only.
 	message := viber.Message{
@@ -175,7 +174,7 @@ func viberClientSendTransactionalMessage() {
 
 func viberClientGetMessageStatus() {
 	// Create new instance of the viber client.
-	viberClient := viber.NewClient("<YOUR_ACCESS_KEY>")
+	viberClient := viber.NewViberClient("<YOUR_ACCESS_KEY>")
 
 	// Call client GetMessageStatus method to get viber message status.
 	receipt, err := viberClient.GetMessageStatus(429)
@@ -199,10 +198,10 @@ func viberClientGetMessageStatus() {
 
 func viberPlusSmsClientSendTransactionalMessage() {
 	// Create new instance of the viber plus SMS client.
-	viberSmsClient := viberplussms.NewClient("<YOUR_ACCESS_KEY>")
+	viberSmsClient := viber.NewViberPlusSmsClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber plus SMS message object. This one will be transactional message with message text only.
-	message := viberplussms.Message{
+	message := viber.MessageWithSms{
 		Message: viber.Message{
 			Sender:         "Custom company",
 			Receiver:       "380504444444",
@@ -237,10 +236,10 @@ func viberPlusSmsClientSendTransactionalMessage() {
 
 func viberPlusSmsClientSendPromotionalMessage() {
 	// Create new instance of the viber plus SMS client.
-	viberSmsClient := viberplussms.NewClient("<YOUR_ACCESS_KEY>")
+	viberSmsClient := viber.NewViberPlusSmsClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber plus SMS message object. This one will be promotional message with message text, image and button.
-	message := viberplussms.Message{
+	message := viber.MessageWithSms{
 		Message: viber.Message{
 			Sender:         "Custom company",
 			Receiver:       "380504444444",
@@ -278,7 +277,7 @@ func viberPlusSmsClientSendPromotionalMessage() {
 
 func viberPlusSmsClientGetMessageStatus() {
 	// Create new instance of the viber plus SMS client.
-	viberSmsClient := viberplussms.NewClient("<YOUR_ACCESS_KEY>")
+	viberSmsClient := viber.NewViberPlusSmsClient("<YOUR_ACCESS_KEY>")
 
 	// Call client GetMessageStatus method to get viber plus SMS message status.
 	receipt, err := viberSmsClient.GetMessageStatus(429)

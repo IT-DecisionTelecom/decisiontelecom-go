@@ -92,25 +92,25 @@ type MessageReceipt struct {
 	Status    MessageStatus `json:"status"`     // Viber message status
 }
 
-// Client is used to work with Viber messages.
-type Client struct {
-	base *BaseClient
+// ViberClient is used to work with Viber messages.
+type ViberClient struct {
+	base *baseClient
 }
 
-// NewClient creates new Viber client instance.
-func NewClient(apiKey string) *Client {
-	return &Client{
-		base: &BaseClient{ApiKey: apiKey},
+// NewViberClient creates new Viber client instance.
+func NewViberClient(apiKey string) *ViberClient {
+	return &ViberClient{
+		base: &baseClient{ApiKey: apiKey},
 	}
 }
 
 // SendMessage sends Viber message.
-func (client *Client) SendMessage(message Message) (MessageId, error) {
+func (client *ViberClient) SendMessage(message Message) (MessageId, error) {
 	return client.base.SendMessage(message)
 }
 
 // GetMessageStatus returns Viber message status.
-func (client *Client) GetMessageStatus(messageId MessageId) (*MessageReceipt, error) {
+func (client *ViberClient) GetMessageStatus(messageId MessageId) (*MessageReceipt, error) {
 	messageReceipt := &MessageReceipt{}
 	if err := client.base.GetMessageStatusResponse(messageId, messageReceipt); err != nil {
 		return nil, err

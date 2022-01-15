@@ -10,13 +10,13 @@ import (
 	"strings"
 )
 
-// BaseClient is a base client for Viber and Viber plus SMS operations.
-type BaseClient struct {
+// baseClient is a base client for Viber and Viber plus SMS operations.
+type baseClient struct {
 	ApiKey string
 }
 
 // SendMessage sends Viber message.
-func (cl *BaseClient) SendMessage(message interface{}) (MessageId, error) {
+func (cl *baseClient) SendMessage(message interface{}) (MessageId, error) {
 	url := fmt.Sprintf("%s/send-viber", baseUrl)
 	responseBody, err := cl.makeHttpRequest(url, message)
 	if err != nil {
@@ -37,7 +37,7 @@ func (cl *BaseClient) SendMessage(message interface{}) (MessageId, error) {
 }
 
 // GetMessageStatus
-func (cl *BaseClient) GetMessageStatusResponse(messageId MessageId, result interface{}) error {
+func (cl *baseClient) GetMessageStatusResponse(messageId MessageId, result interface{}) error {
 	url := fmt.Sprintf("%s/receive-viber", baseUrl)
 	request := map[string]MessageId{messageIdPropertyName: messageId}
 
@@ -54,7 +54,7 @@ func (cl *BaseClient) GetMessageStatusResponse(messageId MessageId, result inter
 }
 
 // MakeHttpRequest performs HTTP request to the Viber endpoints and returns response body.
-func (cl *BaseClient) makeHttpRequest(url string, requestContent interface{}) ([]byte, error) {
+func (cl *baseClient) makeHttpRequest(url string, requestContent interface{}) ([]byte, error) {
 	jsonRequest, _ := json.Marshal(requestContent)
 	accessKeyBase64 := base64.StdEncoding.EncodeToString([]byte(cl.ApiKey))
 
