@@ -32,15 +32,14 @@ First, you need to import DecisionTelecom package which corresponds to your need
 ```go
 import "github.com/IT-DecisionTelecom/decisiontelecom-go/sms"
 import "github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
-import "github.com/IT-DecisionTelecom/decisiontelecom-go/viberplussms"
 ```
 
 Then, create an instance of a required client. Be sure to use real login, password and access key.
 
 ```go
 smsClient := sms.NewClient("<YOUR_LOGIN>", "<YOUR_PASSWORD>")
-viberClient := viber.NewClient("<YOUR_ACCESS_KEY>")
-viberSmsClient := viberplussms.NewClient("<YOUR_ACCESS_KEY>")
+viberClient := viber.NewViberClient("<YOUR_ACCESS_KEY>")
+viberSmsClient := viber.NewViberPlusSmsClient("<YOUR_ACCESS_KEY>")
 ```
 
 Now you can use created client to perform some operations. For example, this is how you can get your SMS balance:
