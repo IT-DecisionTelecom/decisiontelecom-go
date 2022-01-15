@@ -27,7 +27,7 @@ func TestSendMessage(t *testing.T) {
 			httpmock.RegisterResponder("GET", "https://web.it-decision.com/ru/js/send",
 				httpmock.NewStringResponder(200, input.response))
 
-			msgId, err := smsClient.SendMessage(sms.Message{})
+			msgId, err := smsClient.SendMessage(sms.NewMessage("", "", "", true))
 			if err != input.expectedError {
 				t.Errorf("FAIL. Expected error '%v', but got '%v'", input.expectedError, err.Error())
 			}

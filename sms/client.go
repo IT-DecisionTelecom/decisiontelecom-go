@@ -22,6 +22,16 @@ type Message struct {
 	Delivery      bool   // Delivery should be true if a caller needs to obtain the delivery receipt in the future (by message id).
 }
 
+// NewMessage creates new message
+func NewMessage(receiver string, sender string, text string, delivery bool) *Message {
+	return &Message{
+		ReceiverPhone: receiver,
+		Sender:        sender,
+		Text:          text,
+		Delivery:      delivery,
+	}
+}
+
 // Balance represents user money balance.
 type Balance struct {
 	BalanceAmount float64 `json:"balance"`
@@ -127,7 +137,7 @@ func NewClient(login string, password string) *Client {
 }
 
 // SendMessage sends SMS message.
-func (client *Client) SendMessage(message Message) (MessageId, error) {
+func (client *Client) SendMessage(message *Message) (MessageId, error) {
 	var dlr = 0
 	if message.Delivery {
 		dlr = 1

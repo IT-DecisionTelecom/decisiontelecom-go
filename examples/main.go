@@ -26,12 +26,7 @@ func smsClientSendMessage() {
 	smsClient := sms.NewClient("<YOUR_LOGIN>", "<YOUR_PASSWORD>")
 
 	// Create SMS message object
-	message := sms.Message{
-		ReceiverPhone: "380504444444",
-		Sender:        "380505555555",
-		Text:          "Test sms",
-		Delivery:      true,
-	}
+	message := sms.NewMessage("380504444444", "380505555555", "Test sms", true)
 
 	// Call client SendMessage method to send SMS message.
 	msgId, err := smsClient.SendMessage(message)
