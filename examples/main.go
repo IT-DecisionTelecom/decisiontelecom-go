@@ -104,18 +104,17 @@ func viberClientSendPromotionalMessage() {
 	viberClient := viber.NewViberClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber message object. This one will be promotional message with message text, image and button.
-	message := viber.Message{
-		Sender:         "Custom company",
-		Receiver:       "380504444444",
-		MessageType:    viber.TextImageButton,
-		Text:           "Message content",
-		ImageUrl:       "https://yourdomain.com/images/image.jpg",
-		ButtonCaption:  "Join Us",
-		ButtonAction:   "https://yourdomain.com/join-us",
-		SourceType:     viber.Promotional,
-		CallbackUrl:    "https://yourdomain.com/viber-callback",
-		ValidityPeriod: 3600,
-	}
+	message := viber.NewMessage().
+		SetSender("Custom company").
+		SetReceiver("380504444444").
+		SetMessageType(viber.TextImageButton).
+		SetText("Message content").
+		SetImageUrl("https://yourdomain.com/images/image.jpg").
+		SetButtonCaption("Join Us").
+		SetButtonAction("https://yourdomain.com/join-us").
+		SetSourceType(viber.Promotional).
+		SetCallbackUrl("https://yourdomain.com/viber-callback").
+		SetValidityPeriod(3600)
 
 	// Call client SendMessage method to send viber message.
 	msgId, err := viberClient.SendMessage(message)
@@ -142,15 +141,14 @@ func viberClientSendTransactionalMessage() {
 	viberClient := viber.NewViberClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber message object. This one will be transactional message with message text only.
-	message := viber.Message{
-		Sender:         "Custom company",
-		Receiver:       "380504444444",
-		MessageType:    viber.TextOnly,
-		Text:           "Message content",
-		SourceType:     viber.Transactional,
-		CallbackUrl:    "https://yourdomain.com/viber-callback",
-		ValidityPeriod: 3600,
-	}
+	message := viber.NewMessage().
+		SetSender("Custom company").
+		SetReceiver("380504444444").
+		SetMessageType(viber.TextOnly).
+		SetText("Message content").
+		SetSourceType(viber.Transactional).
+		SetCallbackUrl("https://yourdomain.com/viber-callback").
+		SetValidityPeriod(3600)
 
 	// Call client SendMessage method to send viber message.
 	msgId, err := viberClient.SendMessage(message)
@@ -201,18 +199,15 @@ func viberPlusSmsClientSendTransactionalMessage() {
 	viberSmsClient := viber.NewViberPlusSmsClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber plus SMS message object. This one will be transactional message with message text only.
-	message := viber.MessageWithSms{
-		Message: viber.Message{
-			Sender:         "Custom company",
-			Receiver:       "380504444444",
-			MessageType:    viber.TextOnly,
-			Text:           "Message content",
-			SourceType:     viber.Transactional,
-			CallbackUrl:    "https://yourdomain.com/viber-callback",
-			ValidityPeriod: 3600,
-		},
-		SmsText: "Text SMS Message",
-	}
+	message := viber.NewMessage().
+		SetSender("Custom company").
+		SetReceiver("380504444444").
+		SetMessageType(viber.TextOnly).
+		SetText("Message content").
+		SetSourceType(viber.Transactional).
+		SetCallbackUrl("https://yourdomain.com/viber-callback").
+		SetValidityPeriod(3600).
+		AddSmsText("SMS Message")
 
 	// Call client SendMessage method to send viber plus SMS message.
 	msgId, err := viberSmsClient.SendMessage(message)
@@ -239,21 +234,18 @@ func viberPlusSmsClientSendPromotionalMessage() {
 	viberSmsClient := viber.NewViberPlusSmsClient("<YOUR_ACCESS_KEY>")
 
 	// Create viber plus SMS message object. This one will be promotional message with message text, image and button.
-	message := viber.MessageWithSms{
-		Message: viber.Message{
-			Sender:         "Custom company",
-			Receiver:       "380504444444",
-			MessageType:    viber.TextImageButton,
-			Text:           "Message content",
-			ImageUrl:       "https://yourdomain.com/images/image.jpg",
-			ButtonCaption:  "Join Us",
-			ButtonAction:   "https://yourdomain.com/join-us",
-			SourceType:     viber.Promotional,
-			CallbackUrl:    "https://yourdomain.com/viber-callback",
-			ValidityPeriod: 3600,
-		},
-		SmsText: "Text SMS Message",
-	}
+	message := viber.NewMessage().
+		SetSender("Custom company").
+		SetReceiver("380504444444").
+		SetMessageType(viber.TextImageButton).
+		SetText("Message content").
+		SetImageUrl("https://yourdomain.com/images/image.jpg").
+		SetButtonCaption("Join Us").
+		SetButtonAction("https://yourdomain.com/join-us").
+		SetSourceType(viber.Promotional).
+		SetCallbackUrl("https://yourdomain.com/viber-callback").
+		SetValidityPeriod(3600).
+		AddSmsText("SMS Message")
 
 	// Call client SendMessage method to send viber plus SMS message.
 	msgId, err := viberSmsClient.SendMessage(message)

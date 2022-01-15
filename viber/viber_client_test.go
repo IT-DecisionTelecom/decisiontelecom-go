@@ -39,7 +39,7 @@ func TestSendViberMessage(t *testing.T) {
 			httpmock.RegisterResponder("POST", "https://web.it-decision.com/v1/api/send-viber",
 				httpmock.NewStringResponder(input.responseStatus, input.response))
 
-			msgId, err := client.SendMessage(viber.Message{})
+			msgId, err := client.SendMessage(viber.NewMessage())
 			if err != input.expectedError {
 				t.Errorf("FAIL. Expected error '%+v', but got '%+v'", input.expectedError, err)
 			}

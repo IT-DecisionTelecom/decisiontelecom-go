@@ -1,11 +1,5 @@
 package viber
 
-// MessageWithSms represents a Viber plus SMS message.
-type MessageWithSms struct {
-	Message
-	SmsText string `json:"text_sms"` // SmsText is an alternative SMS message text for cases when Viber message is not sent.
-}
-
 // SmsMessageStatus represents SMS message status
 type SmsMessageStatus uint16
 
@@ -51,7 +45,7 @@ func NewViberPlusSmsClient(apiKey string) *ViberPlusSmsClient {
 }
 
 // SendMessage sends Viber plus SMS message.
-func (cl *ViberPlusSmsClient) SendMessage(message MessageWithSms) (MessageId, error) {
+func (cl *ViberPlusSmsClient) SendMessage(message *MessageWithSms) (MessageId, error) {
 	return cl.base.SendMessage(message)
 }
 
