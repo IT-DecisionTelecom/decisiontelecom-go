@@ -82,8 +82,9 @@ func (cl *baseClient) makeHttpRequest(url string, requestContent interface{}) ([
 	bodyStr := string(bodyBytes)
 
 	// Process unsuccessful status codes
-	if !(response.StatusCode >= 200 && response.StatusCode < 300) {
-		return nil, Error{Status: response.StatusCode, Name: http.StatusText(response.StatusCode)}
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return nil, fmt.Errorf("an error occurred while processing request. Response code: %d (%s)",
+			response.StatusCode, http.StatusText(response.StatusCode))
 	}
 
 	// If response contains "name", "message", "code" and "status" words, treat it as a ViberError

@@ -215,6 +215,12 @@ func makeHttpRequest(url string) (string, error) {
 		return "", err
 	}
 
+	// Process unsuccessful status codes
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return "", fmt.Errorf("an error occurred while processing request. Response code: %d (%s)",
+			response.StatusCode, http.StatusText(response.StatusCode))
+	}
+
 	if strings.Contains(string(bodyBytes), "error") {
 		errorCode, err := getIntValueFromListResponseBody(string(bodyBytes), "error", nil)
 		if err != nil {

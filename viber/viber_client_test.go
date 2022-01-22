@@ -1,6 +1,7 @@
 package viber_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
@@ -26,7 +27,7 @@ func TestSendViberMessage(t *testing.T) {
 				Status:  400,
 			},
 		},
-		{401, `Some response content`, -1, viber.Error{Name: "Unauthorized", Status: 401}},
+		{401, `Some response content`, -1, fmt.Errorf("an error occurred while processing request. Response code: 401 (Unauthorized)")},
 	}
 
 	client := viber.NewViberClient("")
@@ -40,7 +41,7 @@ func TestSendViberMessage(t *testing.T) {
 				httpmock.NewStringResponder(input.responseStatus, input.response))
 
 			msgId, err := client.SendMessage(viber.NewMessage())
-			if err != input.expectedError {
+			if err != nil && err.Error() != input.expectedError.Error() {
 				t.Errorf("FAIL. Expected error '%+v', but got '%+v'", input.expectedError, err)
 			}
 
@@ -70,7 +71,7 @@ func TestGetViberMessageStatus(t *testing.T) {
 				Status:  400,
 			},
 		},
-		{401, `Some response content`, nil, viber.Error{Name: "Unauthorized", Status: 401}},
+		{401, `Some response content`, nil, fmt.Errorf("an error occurred while processing request. Response code: 401 (Unauthorized)")},
 	}
 
 	client := viber.NewViberClient("")
@@ -84,7 +85,7 @@ func TestGetViberMessageStatus(t *testing.T) {
 				httpmock.NewStringResponder(input.responseStatus, input.response))
 
 			msgReceipt, err := client.GetMessageStatus(0)
-			if err != input.expectedError {
+			if err != nil && err.Error() != input.expectedError.Error() {
 				t.Errorf("FAIL. Expected error '%+v', but got '%+v'", input.expectedError, err)
 			}
 
