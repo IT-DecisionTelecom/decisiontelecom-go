@@ -10,10 +10,10 @@ import (
 func TestSendMessage(t *testing.T) {
 	var inputData = []struct {
 		response          string
-		expectedMessageId sms.MessageId
+		expectedMessageId int64
 		expectedError     error
 	}{
-		{`["msgid","31885463"]`, sms.MessageId(31885463), nil},
+		{`["msgid","31885463"]`, 31885463, nil},
 		{`["error","44"]`, -1, sms.Error{sms.InvalidLoginOrPassword}},
 	}
 

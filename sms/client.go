@@ -39,9 +39,6 @@ type Balance struct {
 	Currency      string  `json:"currency"`
 }
 
-// MessageId represents an Id of the SMS message.
-type MessageId int64
-
 // ErrorCode represents an error code of the SMS operation.
 type ErrorCode int
 
@@ -137,7 +134,7 @@ func NewClient(login string, password string) *Client {
 }
 
 // SendMessage sends SMS message.
-func (client *Client) SendMessage(message *Message) (MessageId, error) {
+func (client *Client) SendMessage(message *Message) (int64, error) {
 	var dlr = 0
 	if message.Delivery {
 		dlr = 1
@@ -150,16 +147,11 @@ func (client *Client) SendMessage(message *Message) (MessageId, error) {
 		return -1, err
 	}
 
-	msgId, err := getIntValueFromListResponseBody(responseBody, "msgid", nil)
-	if err != nil {
-		return -1, err
-	}
-
-	return MessageId(msgId), nil
+	return getIntValueFromListResponseBody(responseBody, "msgid", nil)
 }
 
 // GetMessageStatus returns SMS message delivery status.
-func (smsClient *Client) GetMessageStatus(messageId MessageId) (MessageStatus, error) {
+func (smsClient *Client) GetMessageStatus(messageId int64) (MessageStatus, error) {
 	url := fmt.Sprintf("%s/state?login=%s&password=%s&msgid=%d", baseUrl, smsClient.Login, smsClient.Password, messageId)
 
 	responseBody, err := makeHttpRequest(url)
