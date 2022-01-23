@@ -32,20 +32,9 @@ type Message struct {
 	ValidityPeriod int               `json:"validity_period"`  // ValidityPeriod is a life time of a message (in seconds).
 }
 
-// MessageWithSms represents a Viber plus SMS message.
-type MessageWithSms struct {
-	Message
-	SmsText string `json:"text_sms"` // SmsText is an alternative SMS message text for cases when Viber message is not sent.
-}
-
 // NewMessage creates new Message.
 func NewMessage() *Message {
 	return &Message{}
-}
-
-// NewMessageWithSms creates new MessageWithSms.
-func NewMessageWithSms() *MessageWithSms {
-	return &MessageWithSms{}
 }
 
 // SetSender sets message sender.
@@ -109,10 +98,10 @@ func (m *Message) SetValidityPeriod(validityPeriod int) *Message {
 }
 
 // AddSmsText adds SMS text to the message (alternative SMS message text for cases when Viber message is not sent).
-func (m *Message) AddSmsText(smsText string) *MessageWithSms {
+/*func (m *Message) AddSmsText(smsText string) *MessageWithSms {
 	msgSms := MessageWithSms{
 		Message: *m,
 	}
 	msgSms.SmsText = smsText
 	return &msgSms
-}
+}*/

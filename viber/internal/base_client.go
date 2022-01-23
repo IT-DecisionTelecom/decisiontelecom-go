@@ -1,4 +1,4 @@
-package viber
+package internal
 
 import (
 	"bytes"
@@ -8,15 +8,20 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	types "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/types"
 )
 
+const baseUrl = "https://web.it-decision.com/v1/api"
+const messageIdPropertyName = "message_id"
+
 // baseClient is a base client for Viber and Viber plus SMS operations.
-type baseClient struct {
+type BaseClient struct {
 	ApiKey string
 }
 
 // SendMessage sends Viber message.
-func (cl *baseClient) SendMessage(message interface{}) (MessageId, error) {
+func (cl *BaseClient) SendMessage(message interface{}) (types.MessageId, error) {
 	url := fmt.Sprintf("%s/send-viber", baseUrl)
 	responseBody, err := cl.makeHttpRequest(url, message)
 	if err != nil {
@@ -33,13 +38,13 @@ func (cl *baseClient) SendMessage(message interface{}) (MessageId, error) {
 		return -1, fmt.Errorf("invalid response: property '%s' was not found", messageIdPropertyName)
 	}
 
-	return MessageId(msgId), nil
+	return types.MessageId(msgId), nil
 }
 
 // GetMessageStatus
-func (cl *baseClient) GetMessageStatusResponse(messageId MessageId, result interface{}) error {
+func (cl *BaseClient) GetMessageStatusResponse(messageId types.MessageId, result interface{}) error {
 	url := fmt.Sprintf("%s/receive-viber", baseUrl)
-	request := map[string]MessageId{messageIdPropertyName: messageId}
+	request := map[string]types.MessageId{messageIdPropertyName: messageId}
 
 	responseBody, err := cl.makeHttpRequest(url, request)
 	if err != nil {
@@ -54,7 +59,7 @@ func (cl *baseClient) GetMessageStatusResponse(messageId MessageId, result inter
 }
 
 // MakeHttpRequest performs HTTP request to the Viber endpoints and returns response body.
-func (cl *baseClient) makeHttpRequest(url string, requestContent interface{}) ([]byte, error) {
+func (cl *BaseClient) makeHttpRequest(url string, requestContent interface{}) ([]byte, error) {
 	jsonRequest, _ := json.Marshal(requestContent)
 	accessKeyBase64 := base64.StdEncoding.EncodeToString([]byte(cl.ApiKey))
 
@@ -90,7 +95,7 @@ func (cl *baseClient) makeHttpRequest(url string, requestContent interface{}) ([
 	// If response contains "name", "message", "code" and "status" words, treat it as a ViberError
 	if strings.Contains(bodyStr, "name") && strings.Contains(bodyStr, "message") &&
 		strings.Contains(bodyStr, "code") && strings.Contains(bodyStr, "status") {
-		var viberError Error
+		var viberError types.Error
 		if err := json.Unmarshal(bodyBytes, &viberError); err != nil {
 			return nil, err
 		}

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
+	types "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/types"
 	"github.com/jarcoal/httpmock"
 )
 
@@ -12,15 +13,15 @@ func TestSendViberMessage(t *testing.T) {
 	var inputData = []struct {
 		responseStatus    int
 		response          string
-		expectedMessageId viber.MessageId
+		expectedMessageId types.MessageId
 		expectedError     error
 	}{
-		{200, `{"message_id":429}`, viber.MessageId(429), nil},
+		{200, `{"message_id":429}`, types.MessageId(429), nil},
 		{
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
 			-1,
-			viber.Error{
+			types.Error{
 				Name:    "Invalid Parameter: source_addr",
 				Message: "Empty parameter or parameter validation error",
 				Code:    1,
@@ -30,7 +31,7 @@ func TestSendViberMessage(t *testing.T) {
 		{401, `Some response content`, -1, fmt.Errorf("an error occurred while processing request. Response code: 401 (Unauthorized)")},
 	}
 
-	client := viber.NewViberClient("")
+	client := viber.NewClient("")
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -59,12 +60,12 @@ func TestGetViberMessageStatus(t *testing.T) {
 		expectedMsgReceipt *viber.MessageReceipt
 		expectedError      error
 	}{
-		{200, `{"message_id":429,"status":1}`, &viber.MessageReceipt{MessageId: 429, Status: viber.Delivered}, nil},
+		{200, `{"message_id":429,"status":1}`, &viber.MessageReceipt{MessageId: 429, Status: types.Delivered}, nil},
 		{
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
 			nil,
-			viber.Error{
+			types.Error{
 				Name:    "Invalid Parameter: source_addr",
 				Message: "Empty parameter or parameter validation error",
 				Code:    1,
@@ -74,7 +75,7 @@ func TestGetViberMessageStatus(t *testing.T) {
 		{401, `Some response content`, nil, fmt.Errorf("an error occurred while processing request. Response code: 401 (Unauthorized)")},
 	}
 
-	client := viber.NewViberClient("")
+	client := viber.NewClient("")
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()

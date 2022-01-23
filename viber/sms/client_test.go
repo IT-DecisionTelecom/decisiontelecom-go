@@ -1,10 +1,11 @@
-package viber_test
+package sms_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
+	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber/sms"
+	types "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/types"
 	"github.com/jarcoal/httpmock"
 )
 
@@ -12,15 +13,15 @@ func TestSendViberPlusSmsMessage(t *testing.T) {
 	var inputData = []struct {
 		responseStatus    int
 		response          string
-		expectedMessageId viber.MessageId
+		expectedMessageId types.MessageId
 		expectedError     error
 	}{
-		{200, `{"message_id":429}`, viber.MessageId(429), nil},
+		{200, `{"message_id":429}`, types.MessageId(429), nil},
 		{
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
 			-1,
-			viber.Error{
+			types.Error{
 				Name:    "Invalid Parameter: source_addr",
 				Message: "Empty parameter or parameter validation error",
 				Code:    1,
@@ -30,7 +31,7 @@ func TestSendViberPlusSmsMessage(t *testing.T) {
 		{401, `Some response content`, -1, fmt.Errorf("an error occurred while processing request. Response code: 401 (Unauthorized)")},
 	}
 
-	client := viber.NewViberPlusSmsClient("")
+	client := sms.NewClient("")
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
@@ -40,7 +41,7 @@ func TestSendViberPlusSmsMessage(t *testing.T) {
 			httpmock.RegisterResponder("POST", "https://web.it-decision.com/v1/api/send-viber",
 				httpmock.NewStringResponder(input.responseStatus, input.response))
 
-			msgId, err := client.SendMessage(viber.NewMessageWithSms())
+			msgId, err := client.SendMessage(sms.NewMessage())
 			if err != nil && err.Error() != input.expectedError.Error() {
 				t.Errorf("FAIL. Expected error '%+v', but got '%+v'", input.expectedError, err)
 			}
@@ -56,17 +57,17 @@ func TestGetViberPlusSmsMessageStatus(t *testing.T) {
 	var inputData = []struct {
 		responseStatus     int
 		response           string
-		expectedMsgReceipt *viber.MessageReceiptWithSms
+		expectedMsgReceipt *sms.MessageReceipt
 		expectedError      error
 	}{
 		{
 			200,
 			`{"message_id":429,"status":1,"sms_message_id":36478,"sms_message_status":2}`,
-			&viber.MessageReceiptWithSms{
+			&sms.MessageReceipt{
 				MessageId:        429,
-				Status:           viber.Delivered,
+				Status:           types.Delivered,
 				SmsMessageId:     36478,
-				SmsMessageStatus: viber.SmsDelivered,
+				SmsMessageStatus: sms.SmsDelivered,
 			},
 			nil,
 		},
@@ -74,7 +75,7 @@ func TestGetViberPlusSmsMessageStatus(t *testing.T) {
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
 			nil,
-			viber.Error{
+			types.Error{
 				Name:    "Invalid Parameter: source_addr",
 				Message: "Empty parameter or parameter validation error",
 				Code:    1,
@@ -84,7 +85,7 @@ func TestGetViberPlusSmsMessageStatus(t *testing.T) {
 		{401, `Some response content`, nil, fmt.Errorf("an error occurred while processing request. Response code: 401 (Unauthorized)")},
 	}
 
-	client := viber.NewViberPlusSmsClient("")
+	client := sms.NewClient("")
 
 	httpmock.Activate()
 	defer httpmock.DeactivateAndReset()
