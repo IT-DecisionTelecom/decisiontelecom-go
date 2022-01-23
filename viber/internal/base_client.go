@@ -8,20 +8,19 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	types "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/types"
 )
 
 const baseUrl = "https://web.it-decision.com/v1/api"
 const messageIdPropertyName = "message_id"
 
-// baseClient is a base client for Viber and Viber plus SMS operations.
+// BaseClient is a base client for Viber and Viber plus SMS clients.
 type BaseClient struct {
-	ApiKey string
+	ApiKey              string
+	ParseViberErrorFunc func([]byte) error
 }
 
 // SendMessage sends Viber message.
-func (cl *BaseClient) SendMessage(message interface{}) (types.MessageId, error) {
+func (cl *BaseClient) SendMessage(message interface{}) (int64, error) {
 	url := fmt.Sprintf("%s/send-viber", baseUrl)
 	responseBody, err := cl.makeHttpRequest(url, message)
 	if err != nil {
@@ -38,13 +37,13 @@ func (cl *BaseClient) SendMessage(message interface{}) (types.MessageId, error) 
 		return -1, fmt.Errorf("invalid response: property '%s' was not found", messageIdPropertyName)
 	}
 
-	return types.MessageId(msgId), nil
+	return msgId, nil
 }
 
 // GetMessageStatus
-func (cl *BaseClient) GetMessageStatusResponse(messageId types.MessageId, result interface{}) error {
+func (cl *BaseClient) GetMessageStatusResponse(messageId int64, result interface{}) error {
 	url := fmt.Sprintf("%s/receive-viber", baseUrl)
-	request := map[string]types.MessageId{messageIdPropertyName: messageId}
+	request := map[string]int64{messageIdPropertyName: messageId}
 
 	responseBody, err := cl.makeHttpRequest(url, request)
 	if err != nil {
@@ -95,12 +94,8 @@ func (cl *BaseClient) makeHttpRequest(url string, requestContent interface{}) ([
 	// If response contains "name", "message", "code" and "status" words, treat it as a ViberError
 	if strings.Contains(bodyStr, "name") && strings.Contains(bodyStr, "message") &&
 		strings.Contains(bodyStr, "code") && strings.Contains(bodyStr, "status") {
-		var viberError types.Error
-		if err := json.Unmarshal(bodyBytes, &viberError); err != nil {
-			return nil, err
-		}
-
-		return nil, viberError
+		// use function to parse ViberError to not reference viber package and to not introduce circular referencing
+		return nil, cl.ParseViberErrorFunc(bodyBytes)
 	}
 
 	return bodyBytes, nil

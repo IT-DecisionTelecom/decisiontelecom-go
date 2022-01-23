@@ -13,10 +13,10 @@ func TestSendViberPlusSmsMessage(t *testing.T) {
 	var inputData = []struct {
 		responseStatus    int
 		response          string
-		expectedMessageId types.MessageId
+		expectedMessageId int64
 		expectedError     error
 	}{
-		{200, `{"message_id":429}`, types.MessageId(429), nil},
+		{200, `{"message_id":429}`, 429, nil},
 		{
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
