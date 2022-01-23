@@ -19,7 +19,6 @@ func main() {
 	viberClientGetMessageStatus()
 
 	viberPlusSmsClientSendTransactionalMessage()
-	viberPlusSmsClientSendPromotionalMessage()
 	viberPlusSmsClientGetMessageStatus()
 }
 
@@ -202,44 +201,6 @@ func viberPlusSmsClientSendTransactionalMessage() {
 	message.SetMessageType(viber.TextOnly)
 	message.SetText("Message content")
 	message.SetSourceType(viber.Transactional)
-	message.SetCallbackUrl("https://yourdomain.com/viber-callback")
-	message.SetValidityPeriod(3600)
-	message.SetSmsText("SMS Message")
-
-	// Call client SendMessage method to send viber plus SMS message.
-	msgId, err := viberSmsClient.SendMessage(message)
-
-	// Handle error if it has occurred while sending viber plus SMS message.
-	if err != nil {
-		viberError, ok := err.(types.Error)
-		if !ok {
-			// A non-DecisionTelecom error occurred (like connection error).
-			fmt.Printf("error while sending Viber plus SMS message: %+v\n", err)
-		} else {
-			// DecisionTelecom error occurred.
-			fmt.Printf("error while sending Viber plus SMS message.\nerror name: %s\nerror message: %s\nerror code: %d\nerror status: %d\n",
-				viberError.Name, viberError.Message, viberError.Code, viberError.Status)
-		}
-	} else {
-		// If no errors occurred, SendMessage method should return Id of the sent Viber plus SMS message.
-		fmt.Printf("message Id: %d\n", msgId)
-	}
-}
-
-func viberPlusSmsClientSendPromotionalMessage() {
-	// Create new instance of the viber plus SMS client.
-	viberSmsClient := viberplussms.NewClient("<YOUR_ACCESS_KEY>")
-
-	// Create viber plus SMS message object. This one will be promotional message with message text, image and button.
-	message := viberplussms.NewMessage()
-	message.SetSender("Custom company")
-	message.SetReceiver("380504444444")
-	message.SetMessageType(viber.TextImageButton)
-	message.SetText("Message content")
-	message.SetImageUrl("https://yourdomain.com/images/image.jpg")
-	message.SetButtonCaption("Join Us")
-	message.SetButtonAction("https://yourdomain.com/join-us")
-	message.SetSourceType(viber.Promotional)
 	message.SetCallbackUrl("https://yourdomain.com/viber-callback")
 	message.SetValidityPeriod(3600)
 	message.SetSmsText("SMS Message")
