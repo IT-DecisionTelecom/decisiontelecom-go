@@ -6,7 +6,6 @@ import (
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/sms"
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
 	viberplussms "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/sms"
-	types "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/types"
 )
 
 func main() {
@@ -117,7 +116,7 @@ func viberClientSendPromotionalMessage() {
 
 	// Handle error if it has occurred while sending viber message.
 	if err != nil {
-		viberError, ok := err.(types.Error)
+		viberError, ok := err.(viber.Error)
 		if !ok {
 			// A non-DecisionTelecom error occurred (like connection error).
 			fmt.Printf("error while sending Viber message: %+v\n", err)
@@ -151,7 +150,7 @@ func viberClientSendTransactionalMessage() {
 
 	// Handle error if it has occurred while sending viber message.
 	if err != nil {
-		viberError, ok := err.(types.Error)
+		viberError, ok := err.(viber.Error)
 		if !ok {
 			// A non-DecisionTelecom error occurred (like connection error).
 			fmt.Printf("error while sending Viber message: %+v\n", err)
@@ -175,7 +174,7 @@ func viberClientGetMessageStatus() {
 
 	// Handle error if it has occurred while getting viber message status.
 	if err != nil {
-		viberError, ok := err.(types.Error)
+		viberError, ok := err.(viber.Error)
 		if !ok {
 			// A non-DecisionTelecom error occurred (like connection error).
 			fmt.Printf("error while getting Viber message status: %+v\n", err)
@@ -210,7 +209,7 @@ func viberPlusSmsClientSendTransactionalMessage() {
 
 	// Handle error if it has occurred while sending viber plus SMS message.
 	if err != nil {
-		viberError, ok := err.(types.Error)
+		viberError, ok := err.(viber.Error)
 		if !ok {
 			// A non-DecisionTelecom error occurred (like connection error).
 			fmt.Printf("error while sending Viber plus SMS message: %+v\n", err)
@@ -234,7 +233,7 @@ func viberPlusSmsClientGetMessageStatus() {
 
 	// Handle error if it has occurred while getting viber plus SMS message status.
 	if err != nil {
-		viberError, ok := err.(types.Error)
+		viberError, ok := err.(viber.Error)
 		if !ok {
 			// A non-DecisionTelecom error occurred (like connection error).
 			fmt.Printf("error while getting Viber plus SMS message status: %+v\n", err)

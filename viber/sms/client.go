@@ -5,7 +5,6 @@ import (
 
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber/internal"
-	types "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/types"
 )
 
 // SmsMessageStatus represents SMS message status
@@ -35,7 +34,7 @@ func (s SmsMessageStatus) String() string {
 // MessageReceipt represents Id and status of the particular Viber plus SMS message.
 type MessageReceipt struct {
 	MessageId        int64               `json:"message_id"`         // Id of the Viber message which status should be got (sent in the last 5 days).
-	Status           types.MessageStatus `json:"status"`             // Viber message status
+	Status           viber.MessageStatus `json:"status"`             // Viber message status
 	SmsMessageId     int64               `json:"sms_message_id"`     // SMS message Id (if available, only for transactional messages)
 	SmsMessageStatus SmsMessageStatus    `json:"sms_message_status"` // SMS message status (if available, only for transactional messages)
 }
@@ -87,7 +86,7 @@ func (client *Client) GetMessageStatus(messageId int64) (*MessageReceipt, error)
 }
 
 func parseViberError(responseBody []byte) error {
-	var viberError types.Error
+	var viberError viber.Error
 	if err := json.Unmarshal(responseBody, &viberError); err != nil {
 		return err
 	}

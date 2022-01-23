@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/IT-DecisionTelecom/decisiontelecom-go/viber"
-	types "github.com/IT-DecisionTelecom/decisiontelecom-go/viber/types"
 	"github.com/jarcoal/httpmock"
 )
 
@@ -21,7 +20,7 @@ func TestSendViberMessage(t *testing.T) {
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
 			-1,
-			types.Error{
+			viber.Error{
 				Name:    "Invalid Parameter: source_addr",
 				Message: "Empty parameter or parameter validation error",
 				Code:    1,
@@ -60,12 +59,12 @@ func TestGetViberMessageStatus(t *testing.T) {
 		expectedMsgReceipt *viber.MessageReceipt
 		expectedError      error
 	}{
-		{200, `{"message_id":429,"status":1}`, &viber.MessageReceipt{MessageId: 429, Status: types.Delivered}, nil},
+		{200, `{"message_id":429,"status":1}`, &viber.MessageReceipt{MessageId: 429, Status: viber.Delivered}, nil},
 		{
 			200,
 			`{"name":"Invalid Parameter: source_addr","message":"Empty parameter or parameter validation error","code":1,"status":400}`,
 			nil,
-			types.Error{
+			viber.Error{
 				Name:    "Invalid Parameter: source_addr",
 				Message: "Empty parameter or parameter validation error",
 				Code:    1,
